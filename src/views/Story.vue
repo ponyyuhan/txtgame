@@ -22,7 +22,7 @@
 import axios from 'axios';
 
 export default {
-  name: 'Story',
+  name: 'StoryPage',
   data() {
     return {
       storyData: [],
