@@ -1,3 +1,5 @@
+// src/router.js
+
 import Vue from 'vue';
 import Router from 'vue-router';
 import HomePage from './views/Home.vue';

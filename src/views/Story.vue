@@ -42,24 +42,34 @@ export default {
       // 格式化内容，保留换行和特殊格式
       return content.replace(/\n/g, '<br>');
     },
-    startGame() {
-      axios.get('/api/start').then((response) => {
+  startGame() {
+    axios.get('/api/start')
+      .then((response) => {
         this.storyData = [response.data.story];
         localStorage.setItem('storyData', JSON.stringify(this.storyData));
+      })
+      .catch((error) => {
+        console.error('API 请求失败：', error);
+        // 使用模拟数据或显示错误提示
+        this.storyData = ['无法获取故事，请检查网络连接。'];
       });
-    },
-    nextDay() {
-      axios
-        .post('/api/next', { storyData: this.storyData })
-        .then((response) => {
-          this.storyData.push(response.data.story);
-          localStorage.setItem('storyData', JSON.stringify(this.storyData));
-          // 滚动到最新的一天
-          this.$nextTick(() => {
-            window.scrollTo(0, document.body.scrollHeight);
-          });
+  },
+  nextDay() {
+    axios.post('/api/next', { storyData: this.storyData })
+      .then((response) => {
+        this.storyData.push(response.data.story);
+        localStorage.setItem('storyData', JSON.stringify(this.storyData));
+        // 滚动到最新的一天
+        this.$nextTick(() => {
+          window.scrollTo(0, document.body.scrollHeight);
         });
-    },
+      })
+      .catch((error) => {
+        console.error('API 请求失败：', error);
+        // 显示错误提示
+        alert('无法获取下一天的故事，请检查网络连接。');
+      });
+  },
     restartGame() {
       if (confirm('确定要重新开始游戏吗？')) {
         localStorage.removeItem('storyData');
